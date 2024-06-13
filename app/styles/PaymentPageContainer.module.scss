@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+@import './mixin';
 
 .page_container {
   display: flex;
@@ -6,9 +8,7 @@
   .logo_section {
     flex: 1;
     background-color: #214aa6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-center;
   }
   .form_section {
     flex: 1;
@@ -31,5 +31,154 @@
       text-align: left;
       color: #272828;
     }
+  }
+}
+
+.label {
+  color: #6f6f6f;
+  font-family: Nunito Sans;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: left;
+  margin-bottom: 4px;
+}
+
+.find_contracts_container {
+  max-width: 456px;
+  padding-top: 48px;
+}
+
+.tooltip_info_text {
+  margin-bottom: 16px;
+  @include button_fonts;
+  text-align: left;
+}
+
+.next_button_first {
+  width: 456px;
+  height: 48px;
+  padding: 12px 32px 12px 32px;
+  border-radius: 32px;
+  @include button_colors;
+  opacity: 0px;
+  @include button_fonts;
+  text-align: center;
+  border: none;
+  margin-top: 48px;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background-color: #183372;
+  }
+}
+
+.button_flex {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+  .next_button {
+    border: none;
+    width: 317px;
+    height: 48px;
+    border-radius: 32px;
+    padding: 12px 32px;
+    @include button_colors;
+    @include button_fonts;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      background-color: #183372;
+    }
+  }
+  .back_button {
+    width: 123px;
+    height: 48px;
+    padding: 12px 32px;
+    gap: 8px;
+    border-radius: 32px;
+    border: 1.5px solid #214aa6;
+    opacity: 0px;
+    color: #214aa6;
+    background-color: white;
+    @include flex-center;
+    @include button_fonts;
+    text-align: center;
+    cursor: pointer;
+  }
+}
+
+.choose_contract_container {
+  .name {
+    margin-top: 40px;
+    width: 420px;
+    padding: 13px 18px;
+    border-radius: 32px;
+    opacity: 0px;
+    background-color: #f9f9f9;
+    @include button_fonts;
+    color: #3f3f3f;
+  }
+  .active_contracts_header {
+    font-family: Nunito Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 32px;
+    color: #0c338a;
+    margin-top: 33.5px;
+    margin-left: 13px;
+  }
+  .contracts_container {
+    // width: 456px;
+    max-width: 480px;
+    max-height: 128px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-top: 31px;
+    flex-wrap: wrap;
+    .contract {
+      width: 165px;
+      padding: 8px 24px;
+      border-radius: 32px;
+      border: 1.5px solid #214aa6;
+      color: #214aa6;
+      opacity: 0px;
+      @include button_fonts;
+      text-align: center;
+      transition: 0.3s;
+      &:hover {
+        @include button_colors;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.inputs_container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 36px;
+  .disabled_input {
+    width: 196px;
+    height: 24px;
+    border: none;
+    background-color: #f7f7fb;
+    border-radius: 4px;
+    padding: 12px;
+  }
+  .error_msg {
+    font-family: Nunito Sans;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: #d03838;
+    margin-top: 4px;
   }
 }

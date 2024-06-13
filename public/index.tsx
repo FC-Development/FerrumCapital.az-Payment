@@ -37,4 +37,19 @@ const cancel_icon = (
   </svg>
 );
 
-export { logo, cancel_icon };
+const back_icon = (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M10.5878 14.4102L7.01031 10.8327H14.9986V9.16599H7.01031L10.5878 5.58849L9.40948 4.41016L3.82031 9.99932L9.40948 15.5885L10.5878 14.4102Z"
+      fill="#214AA6"
+    />
+  </svg>
+);
+
+export { logo, cancel_icon, back_icon };
