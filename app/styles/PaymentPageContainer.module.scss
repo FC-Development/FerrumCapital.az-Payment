@@ -20,7 +20,7 @@
     padding-right: 62px;
     .cancel {
       text-align: right;
-      margin-bottom: 143px;
+      margin-bottom: 75px;
       cursor: pointer;
     }
     .form_heading {
@@ -71,6 +71,12 @@
   &:hover {
     background-color: #183372;
   }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #d4e1ff;
+    border-color: #d4e1ff;
+    color: #ffffff;
+  }
 }
 
 .button_flex {
@@ -93,6 +99,12 @@
     &:hover {
       background-color: #183372;
     }
+    &:disabled {
+      cursor: not-allowed;
+      background-color: #d4e1ff;
+      border-color: #d4e1ff;
+      color: #ffffff;
+    }
   }
   .back_button {
     width: 123px;
@@ -108,6 +120,12 @@
     @include button_fonts;
     text-align: center;
     cursor: pointer;
+    &:disabled {
+      cursor: not-allowed;
+      background-color: #d4e1ff;
+      border-color: #d4e1ff;
+      color: #ffffff;
+    }
   }
 }
 
@@ -141,6 +159,20 @@
     gap: 15px;
     margin-top: 31px;
     flex-wrap: wrap;
+    .selected_contract {
+      width: 165px;
+      padding: 8px 24px;
+      border-radius: 32px;
+      border: 1.5px solid #214aa6;
+      color: #214aa6;
+      background-color: #214aa6;
+      color: #fff;
+      opacity: 0px;
+      @include button_fonts;
+      text-align: center;
+      transition: 0.3s;
+      cursor: pointer;
+    }
     .contract {
       width: 165px;
       padding: 8px 24px;
@@ -173,12 +205,13 @@
     border-radius: 4px;
     padding: 12px;
   }
-  .error_msg {
-    font-family: Nunito Sans;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    color: #d03838;
-    margin-top: 4px;
-  }
+}
+
+.error_msg {
+  font-family: Nunito Sans;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #d03838;
+  margin-top: 4px;
 }
