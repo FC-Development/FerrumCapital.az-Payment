@@ -1,3 +1,40 @@
 body {
   margin: 0px;
 }
+
+.ant-picker-outlined {
+  width: 456px !important;
+  height: 48px !important;
+  background: #f7f7fb !important;
+  border: none !important;
+  padding: 12px !important;
+}
+
+.ant-picker .ant-picker-input > input {
+  font-family: Nunito Sans !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 24px !important;
+  text-align: left !important;
+}
+
+.ant-input-outlined {
+  /* width: 456px !important; */
+  height: 48px !important;
+  /* background: #f7f7fb !important; */
+  /* border: none !important; */
+  padding: 12px !important;
+}
+
+.ant-input-affix-wrapper > input.ant-input {
+  font-family: Nunito Sans !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 24px !important;
+  text-align: left !important;
+}
+
+/* .ant-tooltip .ant-tooltip-inner{
+  background-color: transparent !important;
+  border: none !important;
+} */
