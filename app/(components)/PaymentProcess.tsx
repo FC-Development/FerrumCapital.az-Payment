@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/PaymentPageContainer.module.scss';
 import { Input } from 'antd';
+import { back_icon } from '@/public';
 
 interface Props {
-  errorMessage: boolean;
-  setErrorMessage: (open: boolean) => void;
+  next: () => void;
+  prev: () => void;
 }
 
-const PaymentProcess = ({ errorMessage, setErrorMessage }: Props) => {
-  console.log(errorMessage);
+const PaymentProcess = ({ next, prev }: Props) => {
+  const [amount, setAmount] = useState<string>('');
+  const [amountError, setAmountError] = useState<boolean>(false);
+  console.log(amount);
   return (
     <div className={styles.choose_contract_container}>
       <div className={styles.name}>Əliyev Elnur Vəli</div>
@@ -30,18 +33,34 @@ const PaymentProcess = ({ errorMessage, setErrorMessage }: Props) => {
           <Input
             style={{
               width: '220px',
-              border: errorMessage ? '1px solid #D03838' : 'none',
-              background: errorMessage ? '#FFF0F0' : '#F7F7FB',
+              border: amountError ? '1px solid #D03838' : 'none',
+              background: amountError ? '#FFF0F0' : '#F7F7FB',
             }}
-            onChange={() => setErrorMessage(false)}
+            type="number"
+            onChange={(e) => {
+              setAmountError(false);
+              setAmount(e?.target?.value);
+            }}
             placeholder="0 AZN"
           />
-          {errorMessage && (
+          {amountError && (
             <div className={styles.error_msg}>
               1 AZN - 5000 AZN məbləğ daxil edin{' '}
             </div>
           )}
         </div>
+      </div>
+      <div className={styles.button_flex}>
+        <button onClick={prev} className={styles.back_button}>
+          {back_icon}Geri
+        </button>
+        <button
+          disabled={amount === ''}
+          onClick={() => alert('Form Submitted')}
+          className={styles.next_button}
+        >
+          Növbəti
+        </button>
       </div>
     </div>
   );

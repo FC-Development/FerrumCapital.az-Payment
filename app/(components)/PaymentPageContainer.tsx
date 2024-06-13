@@ -8,7 +8,6 @@ import PaymentProcess from './PaymentProcess';
 
 const PaymentPageContainer = () => {
   const [step, setStep] = useState<number>(1);
-  const [amountError, setAmountError] = useState<boolean>(true);
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
   };
@@ -24,42 +23,17 @@ const PaymentPageContainer = () => {
         <div className={styles.form_heading}>Müqavilə ödənişi</div>
         {step === 1 && (
           <div>
-            <FindContracts />
-            <button onClick={nextStep} className={styles.next_button_first}>
-              Növbəti
-            </button>
+            <FindContracts next={nextStep} />
           </div>
         )}
         {step === 2 && (
           <div>
-            <ChooseContract />
-            <div className={styles.button_flex}>
-              <button onClick={prevStep} className={styles.back_button}>
-                {back_icon}Geri
-              </button>
-              <button onClick={nextStep} className={styles.next_button}>
-                Növbəti
-              </button>
-            </div>
+            <ChooseContract next={nextStep} prev={prevStep} />
           </div>
         )}
         {step === 3 && (
           <div>
-            <PaymentProcess
-              errorMessage={amountError}
-              setErrorMessage={setAmountError}
-            />
-            <div className={styles.button_flex}>
-              <button onClick={prevStep} className={styles.back_button}>
-                {back_icon}Geri
-              </button>
-              <button
-                onClick={() => alert('Form Submitted')}
-                className={styles.next_button}
-              >
-                Növbəti
-              </button>
-            </div>
+            <PaymentProcess next={nextStep} prev={prevStep} />
           </div>
         )}
       </div>
