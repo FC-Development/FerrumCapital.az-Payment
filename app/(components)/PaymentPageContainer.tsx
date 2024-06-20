@@ -1,20 +1,34 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/PaymentPageContainer.module.scss';
-import { back_icon, cancel_icon, logo } from '@/public';
+import { cancel_icon, logo } from '@/public';
 import FindContracts from './FindContracts';
 import ChooseContract from './ChooseContract';
 import PaymentProcess from './PaymentProcess';
 
 const PaymentPageContainer = () => {
-  const [step, setStep] = useState<number>(1);
+  // Initialize state based on local storage
+  const stepIndex =
+    typeof window !== 'undefined' ? window.localStorage.getItem('step') : null;
+  const [step, setStep] = useState<number>(stepIndex ? Number(stepIndex) : 1);
+
+  // Update local storage whenever the step changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('step', step.toString());
+    }
+  }, [step]);
+
+  // Increment the step
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
   };
 
+  // Decrement the step
   const prevStep = () => {
     setStep((prevStep) => prevStep - 1);
   };
+
   return (
     <div className={styles.page_container}>
       <div className={styles.logo_section}>{logo}</div>

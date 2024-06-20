@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import styles from '../styles/PaymentPageContainer.module.scss';
 import { Input } from 'antd';
 import { back_icon } from '@/public';
+import StatusModal from './StatusModal';
 
 interface Props {
   next: () => void;
   prev: () => void;
 }
-
+//localStorage.removeItem(key);
 const PaymentProcess = ({ next, prev }: Props) => {
   const [amount, setAmount] = useState<string>('');
   const [amountError, setAmountError] = useState<boolean>(false);
-  console.log(amount);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
   return (
     <div className={styles.choose_contract_container}>
       <div className={styles.name}>Əliyev Elnur Vəli</div>
@@ -62,6 +64,7 @@ const PaymentProcess = ({ next, prev }: Props) => {
           Növbəti
         </button>
       </div>
+      <StatusModal open={openModal} setOpen={setOpenModal} status="success" />
     </div>
   );
 };
