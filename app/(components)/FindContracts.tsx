@@ -7,18 +7,28 @@ import ID_old from '../../public/vəsiqə foto.png';
 import ID_new from '../../public/Frame 48097282.png';
 import { useDispatch } from 'react-redux';
 import { setField } from '../(store)/(slices)/searchContractsSlice';
+import dayjs from 'dayjs';
+import { postContractDetails } from '../(api)/api';
 
 interface Props {
   next: () => void;
 }
 
 const FindContracts = ({ next }: Props) => {
+  const birthdateValue =
+    typeof window !== 'undefined'
+      ? window.localStorage.getItem('birthdate')
+      : false;
+  const finCodeValue =
+    typeof window !== 'undefined'
+      ? window.localStorage.getItem('finCode')
+      : false;
   const [fincodeError, setFincodeError] = useState<boolean>(false);
   const [dateError, setDateError] = useState<boolean>(false);
   const dispatch = useDispatch();
   const [fields, setFields] = useState<any>({
-    birthdate: null,
-    finCode: '',
+    birthdate: birthdateValue ? dayjs(birthdateValue, 'DD.MM.YYYY') : null,
+    finCode: finCodeValue || '',
   });
   const tooltipContent = (
     <div style={{ padding: '12px' }}>
@@ -37,16 +47,39 @@ const FindContracts = ({ next }: Props) => {
     </div>
   );
 
+  const postDetails = (query: any) => {
+    try {
+      const response = postContractDetails(query);
+      console.log(response);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = (e: any) => {
     e?.preventDefault();
-    if (fields?.finCode?.length !== 7) {
-      setFincodeError(true);
-    }
-    if (fields?.birthdate === null) {
-      setDateError(true);
-    } else {
+    console.log(fields?.birthdate);
+    if (
+      fields?.finCode?.length === 7 &&
+      fields?.birthdate !== null &&
+      fields?.birthdate !== ''
+    ) {
+      const query = {
+        pinCode: fields?.finCode,
+        dateOfBirth: fields?.birthdate,
+      };
+      postDetails(query);
       next();
       dispatch(setField({ key: 'fields', value: fields }));
+      localStorage.setItem(
+        'birthdate',
+        dayjs(fields?.birthdate).format('DD.MM.YYYY')
+      );
+      localStorage?.setItem('finCode', fields?.finCode);
+    } else if (fields?.finCode?.length !== 7) {
+      setFincodeError(true);
+    } else if (fields?.birthdate === null || fields?.birthdate === '') {
+      setDateError(true);
     }
   };
 
@@ -95,6 +128,7 @@ const FindContracts = ({ next }: Props) => {
         <button
           type="submit"
           form="find-contracts"
+          disabled={fincodeError || dateError}
           onClick={handleSubmit}
           className={styles.next_button_first}
         >
