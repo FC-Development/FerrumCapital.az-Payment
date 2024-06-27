@@ -111,7 +111,7 @@ const PaymentProcess = ({ prev }: Props) => {
       console.log(error);
     }
   };
-
+  console.log(birthdate);
   useEffect(() => {
     if (status === 'canceled') {
       setLoading(true);
