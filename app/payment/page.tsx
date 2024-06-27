@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PaymentPageContainer from '../(components)/PaymentPageContainer';
 
 const page = () => {
-  return <PaymentPageContainer />;
+  return (
+    <Suspense>
+      <PaymentPageContainer />
+    </Suspense>
+  );
 };
 
 export default page;

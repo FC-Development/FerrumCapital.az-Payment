@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import styles from '../styles/PaymentPageContainer.module.scss';
 import { Input } from 'antd';
 import { back_icon } from '@/public';
-import StatusModal from './StatusModal';
 import { useSelector } from 'react-redux';
+import { postAmount } from '../(api)/api';
+import { ThreeDots } from 'react-loader-spinner';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   next: () => void;
@@ -11,9 +13,15 @@ interface Props {
 }
 
 const PaymentProcess = ({ next, prev }: Props) => {
+  const router = useRouter();
+  const birthdateValue =
+    typeof window !== 'undefined'
+      ? window.localStorage.getItem('birthdate')
+      : null;
   const [amount, setAmount] = useState<string>('');
   const [amountError, setAmountError] = useState<any>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(false);
   const contracts = useSelector(
     (store: { contracts: any }) => store.contracts?.data
   );
@@ -38,6 +46,33 @@ const PaymentProcess = ({ next, prev }: Props) => {
     }
   };
 
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      setLoading(true);
+      const query = {
+        amount: amount,
+        fullname: contracts?.data?.fullName,
+        description:
+          contract?.documentNumber +
+          ' - ' +
+          contracts?.data?.pinCode +
+          ' - ' +
+          contracts?.data?.fullName,
+        docNumber: contract?.documentNumber,
+        pinCode: contracts?.data?.pinCode,
+        birthdate: birthdateValue,
+      };
+      const response = await postAmount(query);
+      console.log(response.payload?.approveURL);
+      setLoading(false);
+      router?.push(response?.payload?.paymentUrl);
+      console.log(response);
+    } catch (error: any) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
   return (
     <div className={styles.choose_contract_container}>
       <div className={styles.name}>{contracts?.data?.fullName}</div>
@@ -83,14 +118,35 @@ const PaymentProcess = ({ next, prev }: Props) => {
           {back_icon}Geri
         </button>
         <button
-          disabled={amountError}
-          onClick={() => alert('Form Submitted')}
+          disabled={amountError || Number(amount) === 0}
+          onClick={() => handleSubmit()}
           className={styles.next_button}
         >
-          Növbəti
+          {loading ? (
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <ThreeDots
+                visible={true}
+                height="30"
+                width="60"
+                color="#fff"
+                radius="9"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            </div>
+          ) : (
+            <div>Növbəti</div>
+          )}
         </button>
       </div>
-      <StatusModal open={openModal} setOpen={setOpenModal} status="success" />
     </div>
   );
 };
