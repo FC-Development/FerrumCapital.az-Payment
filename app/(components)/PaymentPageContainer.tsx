@@ -15,7 +15,7 @@ const PaymentPageContainer = () => {
   const stepIndex =
     typeof window !== 'undefined' ? window.localStorage.getItem('step') : null;
   const [step, setStep] = useState<number>(
-    status === 'canceled' ? 2 : stepIndex ? Number(stepIndex) : 1
+    status === 'canceled' ? 3 : stepIndex ? Number(stepIndex) : 1
   );
 
   useEffect(() => {
