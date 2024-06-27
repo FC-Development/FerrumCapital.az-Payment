@@ -1,26 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/PaymentPageContainer.module.scss';
 import { Input } from 'antd';
 import { back_icon } from '@/public';
-import { useSelector } from 'react-redux';
-import { postAmount } from '../(api)/api';
-import { ThreeDots } from 'react-loader-spinner';
-import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContracts, postAmount } from '../(api)/api';
+import { Puff, ThreeDots } from 'react-loader-spinner';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { setContractsData } from '../(store)/(slices)/contractsSlice';
 
 interface Props {
   next: () => void;
   prev: () => void;
 }
 
-const PaymentProcess = ({ next, prev }: Props) => {
+const PaymentProcess = ({ prev }: Props) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const status: any = searchParams?.get('res_rtm');
+  const docNum: any = searchParams?.get('docnum');
+  const pinCode: any = searchParams?.get('pincode');
+  const birthdate: any = searchParams?.get('birthdate');
+  const paymentAmount: any = searchParams?.get('amount');
   const birthdateValue =
     typeof window !== 'undefined'
       ? window.localStorage.getItem('birthdate')
       : null;
   const [amount, setAmount] = useState<string>('');
   const [amountError, setAmountError] = useState<any>(false);
-
+  const [defaultContract, setDefaultContract] = useState<any>('');
   const [loading, setLoading] = useState<boolean>(false);
   const contracts = useSelector(
     (store: { contracts: any }) => store.contracts?.data
@@ -32,17 +40,30 @@ const PaymentProcess = ({ next, prev }: Props) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const numericValue = Number(value);
-
-    if (
-      numericValue < contract.currentDebtAmount ||
-      numericValue > contract.totalDebtAmount
-    ) {
-      setAmountError(
-        ` ${contract.currentDebtAmount} AZN və ${contract.totalDebtAmount} AZN arasında məbləğ daxil edin`
-      );
+    if (contract?.documentNumber !== '') {
+      if (
+        numericValue < contract.currentDebtAmount ||
+        numericValue > contract.totalDebtAmount
+      ) {
+        setAmountError(
+          ` ${contract.currentDebtAmount} AZN və ${contract.totalDebtAmount} AZN arasında məbləğ daxil edin`
+        );
+      } else {
+        setAmountError(null);
+        setAmount(value);
+      }
     } else {
-      setAmountError(null);
-      setAmount(value);
+      if (
+        numericValue < defaultContract.currentDebtAmount ||
+        numericValue > defaultContract.totalDebtAmount
+      ) {
+        setAmountError(
+          ` ${contract.currentDebtAmount} AZN və ${contract.totalDebtAmount} AZN arasında məbləğ daxil edin`
+        );
+      } else {
+        setAmountError(null);
+        setAmount(value);
+      }
     }
   };
 
@@ -64,23 +85,76 @@ const PaymentProcess = ({ next, prev }: Props) => {
         birthdate: birthdateValue,
       };
       const response = await postAmount(query);
-      console.log(response.payload?.approveURL);
       setLoading(false);
       router?.push(response?.payload?.paymentUrl);
-      console.log(response);
     } catch (error: any) {
       console.log(error);
       setLoading(false);
     }
   };
-  return (
+  const getDetails = async (query: any) => {
+    setLoading(true);
+    try {
+      const response: any = await getContracts(query);
+      setLoading(true);
+      if (response?.data !== undefined && response?.status === 200) {
+        setLoading(false);
+        dispatch(setContractsData(response?.data));
+        const defaultContract = response?.data?.data?.contracts?.find(
+          (item: any) => item?.documentNumber === docNum
+        );
+        setDefaultContract(defaultContract);
+      }
+    } catch (error: any) {
+      setLoading(false);
+      alert('Finkod tapılmadı');
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (status === 'canceled') {
+      setLoading(true);
+      setAmount(paymentAmount);
+      const query = {
+        pinCode: pinCode,
+        dateOfBirth: birthdate,
+      };
+      getDetails(JSON.stringify(query));
+    }
+  }, []);
+  return loading ? (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '50vh',
+        paddingRight: '150px',
+      }}
+    >
+      {' '}
+      <Puff
+        height="120"
+        width="120"
+        radius={1}
+        color="#EAEBF2"
+        ariaLabel="puff-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+      />
+    </div>
+  ) : (
     <div className={styles.choose_contract_container}>
       <div className={styles.name}>{contracts?.data?.fullName}</div>
       <div className={styles.inputs_container}>
         <div>
           <div className={styles.label}>Müqavilə nömrəsi</div>
           <div className={styles.disabled_input}>
-            {contract?.documentNumber}
+            {defaultContract
+              ? defaultContract?.documentNumber
+              : contract?.documentNumber}
           </div>
         </div>
         <div>
@@ -92,13 +166,17 @@ const PaymentProcess = ({ next, prev }: Props) => {
         <div>
           <div className={styles.label}>Ümumi borc</div>
           <div className={styles.disabled_input}>
-            {contract?.totalDebtAmount}
+            {defaultContract
+              ? defaultContract?.totalDebtAmount
+              : contract?.totalDebtAmount}
           </div>
         </div>
         <div>
           <div className={styles.label}>Ödəniləcək məbləğ *</div>
           <Input
-            defaultValue={contract?.currentDebtAmount}
+            defaultValue={
+              paymentAmount ? paymentAmount : contract?.currentDebtAmount
+            }
             style={{
               width: '220px',
               border: amountError ? '1px solid #D03838' : 'none',
