@@ -5,21 +5,25 @@ import { cancel_icon, logo } from '@/public';
 import FindContracts from './FindContracts';
 import ChooseContract from './ChooseContract';
 import PaymentProcess from './PaymentProcess';
+import { useSearchParams } from 'next/navigation';
+import StatusModal from './StatusModal';
 
 const PaymentPageContainer = () => {
-  // Initialize state based on local storage
+  const searchParams = useSearchParams();
+  const status: any = searchParams?.get('res_rtm');
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const stepIndex =
     typeof window !== 'undefined' ? window.localStorage.getItem('step') : null;
-  const [step, setStep] = useState<number>(stepIndex ? Number(stepIndex) : 1);
+  const [step, setStep] = useState<number>(
+    status === 'canceled' ? 2 : stepIndex ? Number(stepIndex) : 1
+  );
 
-  // Update local storage whenever the step changes
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('step', step.toString());
     }
   }, [step]);
 
-  // Increment the step
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
   };
@@ -33,7 +37,7 @@ const PaymentPageContainer = () => {
     localStorage?.removeItem('birthdate');
     localStorage?.removeItem('finCode');
     localStorage?.setItem('step', '1');
-  });
+  }, []);
 
   return (
     <div className={styles.page_container}>
@@ -57,6 +61,11 @@ const PaymentPageContainer = () => {
           </div>
         )}
       </div>
+      <StatusModal
+        open={status === 'approve' || status == 'declined'}
+        setOpen={setOpenModal}
+        status={status === 'approve' ? 'success' : 'error'}
+      />
     </div>
   );
 };
