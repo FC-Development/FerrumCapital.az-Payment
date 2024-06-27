@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/PaymentPageContainer.module.scss';
 import { DatePicker, Input, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
@@ -8,7 +8,9 @@ import ID_new from '../../public/Frame 48097282.png';
 import { useDispatch } from 'react-redux';
 import { setField } from '../(store)/(slices)/searchContractsSlice';
 import dayjs from 'dayjs';
-import { postContractDetails } from '../(api)/api';
+import { getContracts } from '../(api)/api';
+import { setContractsData } from '../(store)/(slices)/contractsSlice';
+import { Puff, ThreeDots } from 'react-loader-spinner';
 
 interface Props {
   next: () => void;
@@ -18,17 +20,18 @@ const FindContracts = ({ next }: Props) => {
   const birthdateValue =
     typeof window !== 'undefined'
       ? window.localStorage.getItem('birthdate')
-      : false;
+      : null;
   const finCodeValue =
     typeof window !== 'undefined'
       ? window.localStorage.getItem('finCode')
       : false;
   const [fincodeError, setFincodeError] = useState<boolean>(false);
   const [dateError, setDateError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const [fields, setFields] = useState<any>({
-    birthdate: birthdateValue ? dayjs(birthdateValue, 'DD.MM.YYYY') : null,
-    finCode: finCodeValue || '',
+    birthdate: '',
+    finCode: '',
   });
   const tooltipContent = (
     <div style={{ padding: '12px' }}>
@@ -47,35 +50,47 @@ const FindContracts = ({ next }: Props) => {
     </div>
   );
 
-  const postDetails = (query: any) => {
+  const getDetails = async (query: any) => {
+    setLoading(true);
     try {
-      const response = postContractDetails(query);
-      console.log(response);
+      const response: any = await getContracts(query);
+      setLoading(true);
+      if (response?.data !== undefined && response?.status === 200) {
+        setLoading(false);
+        dispatch(setContractsData(response?.data));
+        dispatch(setField({ key: 'fields', value: fields }));
+        localStorage.setItem(
+          'birthdate',
+          dayjs(fields?.birthdate, 'DD.MM.YYYY').format('DD.MM.YYYY')
+        );
+        localStorage?.setItem('finCode', fields?.finCode);
+        next();
+      }
     } catch (error: any) {
+      setLoading(false);
+      alert('Finkod tapılmadı');
       console.log(error);
     }
   };
 
   const handleSubmit = (e: any) => {
     e?.preventDefault();
-    console.log(fields?.birthdate);
     if (
       fields?.finCode?.length === 7 &&
       fields?.birthdate !== null &&
       fields?.birthdate !== ''
     ) {
+      // const query = {
+      //   pinCode: fields?.finCode,
+      //   dateOfBirth: dayjs(fields?.birthdate).format('YYYY-MM-DD'),
+      // };
       const query = {
         pinCode: fields?.finCode,
-        dateOfBirth: fields?.birthdate,
+        dateOfBirth: dayjs(fields?.birthdate, 'DD.MM.YYYY').format(
+          'YYYY-MM-DD'
+        ),
       };
-      postDetails(query);
-      next();
-      dispatch(setField({ key: 'fields', value: fields }));
-      localStorage.setItem(
-        'birthdate',
-        dayjs(fields?.birthdate).format('DD.MM.YYYY')
-      );
-      localStorage?.setItem('finCode', fields?.finCode);
+      getDetails(JSON.stringify(query));
     } else if (fields?.finCode?.length !== 7) {
       setFincodeError(true);
     } else if (fields?.birthdate === null || fields?.birthdate === '') {
@@ -88,13 +103,20 @@ const FindContracts = ({ next }: Props) => {
       <div className={styles.label}>Doğum tarixi</div>
       <form id="find-contracts">
         <DatePicker
-          defaultValue={fields?.birthdate}
+          defaultValue={
+            typeof dayjs(birthdateValue, 'DD.MM.YYYY') === 'string'
+              ? dayjs(birthdateValue, 'DD.MM.YYYY')
+              : ''
+          }
           format={'DD.MM.YYYY'}
           placeholder="Seçin"
           suffixIcon={false}
           onChange={(value: any, dateString: any) => {
             setDateError(false);
-            setFields({ ...fields, birthdate: dateString });
+            setFields({
+              ...fields,
+              birthdate: dayjs(dateString, 'DD.MM.YYYY'),
+            });
           }}
         />
         {dateError && (
@@ -104,7 +126,7 @@ const FindContracts = ({ next }: Props) => {
           FİN kod
         </div>
         <Input
-          defaultValue={fields?.finCode}
+          defaultValue={finCodeValue || ''}
           placeholder="Finkod daxil edin"
           width={456}
           max={7}
@@ -132,7 +154,29 @@ const FindContracts = ({ next }: Props) => {
           onClick={handleSubmit}
           className={styles.next_button_first}
         >
-          Növbəti
+          {loading ? (
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <ThreeDots
+                visible={true}
+                height="30"
+                width="60"
+                color="#fff"
+                radius="9"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            </div>
+          ) : (
+            <div>Növbəti</div>
+          )}
         </button>
       </form>
     </div>
