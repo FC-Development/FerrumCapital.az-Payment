@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import styles from '../styles/PaymentPageContainer.module.scss';
 import { back_icon } from '@/public';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedContract } from '../(store)/(slices)/selectedContractSlice';
+import { Spin } from 'antd';
 
 interface Props {
   next: () => void;
@@ -8,50 +11,67 @@ interface Props {
 }
 
 const ChooseContract = ({ next, prev }: Props) => {
-  const [selected, setSelected] = useState<any[]>([]);
-  const data = [
-    { id: 0, name: '1235667' },
-    { id: 1, name: '1235667' },
-    { id: 2, name: '1235667' },
-  ];
+  const dispatch = useDispatch();
+  const contracts = useSelector(
+    (store: { contracts: any }) => store.contracts?.data?.data
+  );
+  const [selected, setSelected] = useState<any>();
 
-  console.log(selected);
-  const handleContractClick = (id: number) => {
-    setSelected((prevSelected) => {
-      if (prevSelected.includes(id)) {
-        return prevSelected.filter((contractId) => contractId !== id);
-      } else {
-        return [...prevSelected, id];
-      }
-    });
+  const handleContractClick = (item: any) => {
+    setSelected(item);
+    dispatch(
+      setSelectedContract({
+        currentDebtAmount: item?.currentDebtAmount,
+        documentNumber: item?.documentNumber,
+        totalDebtAmount: item?.totalDebtAmount,
+      })
+    );
   };
+
   return (
     <div className={styles.choose_contract_container}>
-      <div className={styles.name}>Əliyev Elnur Vəli</div>
+      {contracts?.contracts?.documentNumber !== '' && (
+        <div className={styles.name}>{contracts?.fullName}</div>
+      )}
       <div className={styles.active_contracts_header}>Aktiv müqavilələr</div>
       <div className={styles.contracts_container}>
-        {data?.map((item: any) => {
-          return (
-            <div
-              key={item?.id}
-              className={
-                selected?.includes(item?.id)
-                  ? `${styles.selected_contract}`
-                  : `${styles.contract}`
-              }
-              onClick={() => handleContractClick(item?.id)}
-            >
-              {item?.name}
-            </div>
-          );
-        })}
+        {contracts?.contracts?.documentNumber === '' ? (
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              height: '100px',
+              overflowY: 'hidden',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Spin />
+          </div>
+        ) : (
+          contracts?.contracts?.map((item: any, index: any) => {
+            return (
+              <div
+                key={index}
+                className={
+                  selected === item
+                    ? `${styles.selected_contract}`
+                    : `${styles.contract}`
+                }
+                onClick={() => handleContractClick(item)}
+              >
+                {item?.documentNumber}
+              </div>
+            );
+          })
+        )}
       </div>
       <div className={styles.button_flex}>
         <button onClick={prev} className={styles.back_button}>
           {back_icon}Geri
         </button>
         <button
-          disabled={selected?.length === 0}
+          disabled={selected === undefined}
           onClick={() => next()}
           className={styles.next_button}
         >

@@ -29,6 +29,12 @@ const PaymentPageContainer = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
+  useEffect(() => {
+    localStorage?.removeItem('birthdate');
+    localStorage?.removeItem('finCode');
+    localStorage?.setItem('step', '1');
+  });
+
   return (
     <div className={styles.page_container}>
       <div className={styles.logo_section}>{logo}</div>
