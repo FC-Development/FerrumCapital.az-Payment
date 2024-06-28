@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/PaymentPageContainer.module.scss';
 import { DatePicker, Input, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import Image from 'next/image';
-import ID_old from '../../public/vəsiqə foto.png';
-import ID_new from '../../public/Frame 48097282.png';
+import ID_old from '../../public/vəsiqəfoto.png';
+import ID_new from '../../public/Frame48097282.png';
 import { useDispatch } from 'react-redux';
 import { setField } from '../(store)/(slices)/searchContractsSlice';
 import dayjs from 'dayjs';
 import { getContracts } from '../(api)/api';
 import { setContractsData } from '../(store)/(slices)/contractsSlice';
-import { Puff, ThreeDots } from 'react-loader-spinner';
+import { ThreeDots } from 'react-loader-spinner';
 
 interface Props {
   next: () => void;
@@ -28,8 +28,11 @@ const FindContracts = ({ next }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const [fields, setFields] = useState<any>({
-    birthdate: '',
-    finCode: '',
+    birthdate:
+      typeof birthdateValue === 'string'
+        ? dayjs(birthdateValue, 'DD.MM.YYYY')
+        : undefined,
+    finCode: finCodeValue ?? '',
   });
   const tooltipContent = (
     <div style={{ padding: '12px' }}>
@@ -100,7 +103,7 @@ const FindContracts = ({ next }: Props) => {
       <form id="find-contracts">
         <DatePicker
           defaultValue={
-            typeof dayjs(birthdateValue, 'DD.MM.YYYY') === 'string'
+            typeof birthdateValue === 'string'
               ? dayjs(birthdateValue, 'DD.MM.YYYY')
               : undefined
           }
@@ -122,13 +125,16 @@ const FindContracts = ({ next }: Props) => {
           FİN kod
         </div>
         <Input
-          value={fields.finCode}
+          defaultValue={finCodeValue ?? ''}
+          value={fields?.finCod}
           placeholder="Finkod daxil edin"
           width={456}
           maxLength={7}
           onChange={(e) => {
-            const value = e.target.value.toUpperCase().slice(0, 7); // Convert to uppercase and limit to 7 characters
-            setFields({ ...fields, finCode: value });
+            setFields({
+              ...fields,
+              finCode: e?.target?.value?.toUpperCase().slice(0, 7),
+            });
             setFincodeError(false);
           }}
           style={{ border: 'none', background: '#F7F7FB' }}
