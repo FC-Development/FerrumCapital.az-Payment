@@ -172,7 +172,7 @@ const PaymentProcess = ({ prev }: Props) => {
           </div>
         </div>
         <div>
-          <div className={styles.label}>Ödəniləcək məbləğ *</div>
+          <div className={styles.label}>Məbləğ *</div>
           <Input
             defaultValue={
               paymentAmount ? paymentAmount : contract?.currentDebtAmount
