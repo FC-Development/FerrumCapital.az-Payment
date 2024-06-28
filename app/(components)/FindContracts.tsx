@@ -22,9 +22,7 @@ const FindContracts = ({ next }: Props) => {
       ? window.localStorage.getItem('birthdate')
       : null;
   const finCodeValue =
-    typeof window !== 'undefined'
-      ? window.localStorage.getItem('finCode')
-      : false;
+    typeof window !== 'undefined' ? window.localStorage.getItem('finCode') : '';
   const [fincodeError, setFincodeError] = useState<boolean>(false);
   const [dateError, setDateError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,16 +52,15 @@ const FindContracts = ({ next }: Props) => {
     setLoading(true);
     try {
       const response: any = await getContracts(query);
-      setLoading(true);
+      setLoading(false);
       if (response?.data !== undefined && response?.status === 200) {
-        setLoading(false);
         dispatch(setContractsData(response?.data));
         dispatch(setField({ key: 'fields', value: fields }));
         localStorage.setItem(
           'birthdate',
           dayjs(fields?.birthdate, 'DD.MM.YYYY').format('DD.MM.YYYY')
         );
-        localStorage?.setItem('finCode', fields?.finCode);
+        localStorage.setItem('finCode', fields?.finCode.toUpperCase()); // Ensure finCode is stored in uppercase
         next();
       }
     } catch (error: any) {
@@ -74,27 +71,26 @@ const FindContracts = ({ next }: Props) => {
   };
 
   const handleSubmit = (e: any) => {
-    e?.preventDefault();
+    e.preventDefault();
     if (
       fields?.finCode?.length === 7 &&
       fields?.birthdate !== null &&
       fields?.birthdate !== ''
     ) {
-      // const query = {
-      //   pinCode: fields?.finCode,
-      //   dateOfBirth: dayjs(fields?.birthdate).format('YYYY-MM-DD'),
-      // };
       const query = {
-        pinCode: fields?.finCode,
+        pinCode: fields?.finCode.toUpperCase(), // Ensure finCode sent to API is in uppercase
         dateOfBirth: dayjs(fields?.birthdate, 'DD.MM.YYYY').format(
           'YYYY-MM-DD'
         ),
       };
-      getDetails(JSON.stringify(query));
-    } else if (fields?.finCode?.length !== 7) {
-      setFincodeError(true);
-    } else if (fields?.birthdate === null || fields?.birthdate === '') {
-      setDateError(true);
+      getDetails(query);
+    } else {
+      if (fields?.finCode?.length !== 7) {
+        setFincodeError(true);
+      }
+      if (fields?.birthdate === null || fields?.birthdate === '') {
+        setDateError(true);
+      }
     }
   };
 
@@ -106,7 +102,7 @@ const FindContracts = ({ next }: Props) => {
           defaultValue={
             typeof dayjs(birthdateValue, 'DD.MM.YYYY') === 'string'
               ? dayjs(birthdateValue, 'DD.MM.YYYY')
-              : ''
+              : undefined
           }
           format={'DD.MM.YYYY'}
           placeholder="Seçin"
@@ -126,14 +122,14 @@ const FindContracts = ({ next }: Props) => {
           FİN kod
         </div>
         <Input
-          defaultValue={finCodeValue || ''}
+          value={fields.finCode}
           placeholder="Finkod daxil edin"
           width={456}
-          max={7}
-          min={7}
+          maxLength={7}
           onChange={(e) => {
+            const value = e.target.value.toUpperCase().slice(0, 7); // Convert to uppercase and limit to 7 characters
+            setFields({ ...fields, finCode: value });
             setFincodeError(false);
-            setFields({ ...fields, finCode: e?.target?.value });
           }}
           style={{ border: 'none', background: '#F7F7FB' }}
           suffix={
