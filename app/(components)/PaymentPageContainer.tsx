@@ -11,7 +11,10 @@ import StatusModal from './StatusModal';
 const PaymentPageContainer = () => {
   const searchParams = useSearchParams();
   const status: any = searchParams?.get('res_rtm');
+  const docNum: any = searchParams?.get('docnum');
+  const pinCode: any = searchParams?.get('pincode');
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const paymentAmount: any = searchParams?.get('amount');
   const stepIndex =
     typeof window !== 'undefined' ? window.localStorage.getItem('step') : null;
   const [step, setStep] = useState<number>(
@@ -37,6 +40,9 @@ const PaymentPageContainer = () => {
     localStorage?.removeItem('birthdate');
     localStorage?.removeItem('finCode');
     localStorage?.setItem('step', '1');
+    if (status === 'approve') {
+      console.log('fff');
+    }
   }, []);
 
   return (
