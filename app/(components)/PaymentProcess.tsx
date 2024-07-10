@@ -78,11 +78,7 @@ const PaymentProcess = ({ prev }: Props) => {
         amount: amount,
         fullname: contracts?.data?.fullName,
         description:
-          contract?.documentNumber +
-          ' - ' +
-          contracts?.data?.pinCode +
-          ' - ' +
-          contracts?.data?.fullName,
+          contract?.documentNumber + ' - ' + contracts?.data?.pinCode,
         docNumber: contract?.documentNumber,
         pinCode: contracts?.data?.pinCode,
         birthdate: birthdateValue,
