@@ -34,7 +34,7 @@ export const postAmount = async (query: any) => {
       data: {
         body: {
           amount: query.amount,
-          approveURL: `https://payment.ferrumcapital.az/payment?res_rtm=approve&amount=${query.amount}&docnum=${query.docNumber}`,
+          approveURL: `https://payment.ferrumcapital.az/payment?res_rtm=approve&amount=${query.amount}&docnum=${query.docNumber}&pincode=${query.pinCode}`,
           cancelURL: `https://payment.ferrumcapital.az/payment?res_rtm=canceled&amount=${query.amount}&docnum=${query.docNumber}&pincode=${query.pinCode}&birthdate=${query.birthdate}`,
           currencyType: 'AZN',
           customMessage: 'dynamic amount invoice',
@@ -54,6 +54,24 @@ export const postAmount = async (query: any) => {
         },
         merchant: 'ES1092847',
       },
+    });
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const postPaymentDetail = async (query: any) => {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: 'http://172.16.30.26:8283/v1/api/payments/detail',
+      headers: {
+        'vendor-id': 'PAYRIFF',
+        'Content-Type': 'application/json',
+      },
+      data: query,
     });
     return response?.data;
   } catch (error) {

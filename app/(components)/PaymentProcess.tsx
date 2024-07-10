@@ -3,10 +3,12 @@ import styles from '../styles/PaymentPageContainer.module.scss';
 import { Input } from 'antd';
 import { back_icon } from '@/public';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContracts, postAmount } from '../(api)/api';
+import { getContracts, postAmount, postPaymentDetail } from '../(api)/api';
 import { Puff, ThreeDots } from 'react-loader-spinner';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { setContractsData } from '../(store)/(slices)/contractsSlice';
+import StatusModal from './StatusModal';
+import dayjs from 'dayjs';
 
 interface Props {
   next: () => void;
@@ -27,6 +29,7 @@ const PaymentProcess = ({ prev }: Props) => {
       ? window.localStorage.getItem('birthdate')
       : null;
   const [amount, setAmount] = useState<string>('');
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [amountError, setAmountError] = useState<any>(false);
   const [defaultContract, setDefaultContract] = useState<any>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -111,7 +114,7 @@ const PaymentProcess = ({ prev }: Props) => {
       console.log(error);
     }
   };
-  console.log(birthdate);
+  console.log(status);
   useEffect(() => {
     if (status === 'canceled') {
       setLoading(true);
@@ -225,6 +228,7 @@ const PaymentProcess = ({ prev }: Props) => {
           )}
         </button>
       </div>
+      <StatusModal open={openModal} setOpen={setOpenModal} status="success" />
     </div>
   );
 };
