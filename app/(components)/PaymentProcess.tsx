@@ -85,7 +85,7 @@ const PaymentProcess = ({ prev }: Props) => {
       };
       const response = await postAmount(query);
       setLoading(false);
-      window.open(response?.payload?.paymentUrl, '_blank');
+      router?.push(response?.payload?.paymentUrl);
     } catch (error: any) {
       console.log(error);
       setLoading(false);
