@@ -14,8 +14,10 @@ export async function POST(req: any, res: any) {
   const docNum = searchParams.get('docnum');
 
   const payload = {
-    docItemNumber: docNum,
-    pinCode: pincode,
+    // docItemNumber: docNum, //istifade olunmayacaq artiq
+    // pinCode: pincode, //istifade olunmayacaq artiq
+    docItemNumber: metadata.payload.description, 
+    pinCode: metadata.payload.customMessage,
     transactId: metadata.payload.orderId,
     paymentDate: dayjs(metadata.payload.createdDate).format(
       'YYYY-MM-DD HH:mm:ss'

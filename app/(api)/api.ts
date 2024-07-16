@@ -37,10 +37,10 @@ export const postAmount = async (query: any) => {
           approveURL: `https://payment.ferrumcapital.az/payment?res_rtm=approve`,
           cancelURL: `https://payment.ferrumcapital.az/payment?res_rtm=canceled`,
           currencyType: 'AZN',
-          customMessage: query.pinCode, //musteri finkodu burdan cekilecek
+          customMessage: query.pinCode, //musteri finkodu gonderilecek ve cekilecek
           declineURL: 'https://payment.ferrumcapital.az/payment?res_rtm=decline',
           // description: query.description,
-          description: query.docNumber, //muqavile uzre asm gonderilecek
+          description: query.docNumber, //asm muqavile nomresi gonderilecek ve gonderilecek
           email: 'finance4@ferrumcapital.az',
           expireDate: getCurrentDateExpireTime(),
           fullName: query.fullname,
