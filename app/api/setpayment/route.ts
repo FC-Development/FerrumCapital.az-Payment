@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 axiosCurlirize(axios);
 
 export async function POST(req: any, res: any) {
-  const url = process.env.TEST_SET_PAYMENT_API_URL || '';
+  const url = process.env.PROD_SET_PAYMENT_API_URL || '';
 
   const metadata = await req.json();
   const { searchParams } = new URL(req.url);
