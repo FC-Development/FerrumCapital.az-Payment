@@ -47,7 +47,7 @@ export const postAmount = async (query: any) => {
           installmentPeriod: 0,
           installmentProductType: 'BIRKART',
           languageType: 'AZ',
-          phoneNumber: null,
+          phoneNumber: "+994500000000",
           sendSms: false,
           amountDynamic: false,
           directPay: true,
