@@ -34,8 +34,11 @@ const StatusModal = ({ open, setOpen, status }: StatusModalProps) => {
           {status === 'success' ? 'Ödənildi' : 'Xəta baş verdi'}
         </div>
         <div className={styles.description}>
-          {status === 'success'
+          {/* {status === 'success'
             ? `${docNumber} nömrəli müqaviləyə ${amount} AZN məbləğində ödəniş uğurla həyata keçmişdir`
+            : 'Zəhmət olmasa yenidən cəhd edin'} */}
+            {status === 'success'
+            ? `Ödəniş uğurla həyata keçmişdir təşəkkür edirik`
             : 'Zəhmət olmasa yenidən cəhd edin'}
         </div>
         <button

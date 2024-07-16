@@ -34,20 +34,20 @@ export const postAmount = async (query: any) => {
       data: {
         body: {
           amount: query.amount,
-          approveURL: `https://payment.ferrumcapital.az/payment?res_rtm=approve&amount=${query.amount}&docnum=${query.docNumber}&pincode=${query.pinCode}`,
-          cancelURL: `https://payment.ferrumcapital.az/payment?res_rtm=canceled&amount=${query.amount}&docnum=${query.docNumber}&pincode=${query.pinCode}&birthdate=${query.birthdate}`,
+          approveURL: `https://payment.ferrumcapital.az/payment?res_rtm=approve`,
+          cancelURL: `https://payment.ferrumcapital.az/payment?res_rtm=canceled`,
           currencyType: 'AZN',
-          customMessage: 'dynamic amount invoice',
-          declineURL:
-            'https://payment.ferrumcapital.az/payment?res_rtm=decline',
-          description: query.description,
-          email: 'eynullabeyliy@gmail.com',
+          customMessage: query.pinCode, //musteri finkodu burdan cekilecek
+          declineURL: 'https://payment.ferrumcapital.az/payment?res_rtm=decline',
+          // description: query.description,
+          description: query.docNumber, //muqavile uzre asm gonderilecek
+          email: 'finance4@ferrumcapital.az',
           expireDate: getCurrentDateExpireTime(),
           fullName: query.fullname,
           installmentPeriod: 0,
           installmentProductType: 'BIRKART',
           languageType: 'AZ',
-          phoneNumber: '994513114444',
+          phoneNumber: null,
           sendSms: false,
           amountDynamic: false,
           directPay: true,
