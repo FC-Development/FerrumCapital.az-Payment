@@ -71,6 +71,8 @@ const PaymentProcess = ({ prev }: Props) => {
   };
 
   const handleSubmit = async () => {
+    alert("Texniki işlərdən dolayı xidmət müvəqqəti olaraq dayandırlmışdır");
+    /*
     setLoading(true);
     try {
       setLoading(true);
@@ -90,6 +92,7 @@ const PaymentProcess = ({ prev }: Props) => {
       console.log(error);
       setLoading(false);
     }
+    */
   };
   const getDetails = async (query: any) => {
     setLoading(true);
@@ -173,9 +176,9 @@ const PaymentProcess = ({ prev }: Props) => {
         <div>
           <div className={styles.label}>Məbləğ *</div>
           <Input
-            defaultValue={
-              paymentAmount ? paymentAmount : contract?.currentDebtAmount
-            }
+            // defaultValue={
+            //   paymentAmount ? paymentAmount : contract?.currentDebtAmount
+            // }
             style={{
               width: '220px',
               border: amountError ? '1px solid #D03838' : 'none',
