@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 export const getContracts = async (query: any) => {
   try {
     const response = await axios({
@@ -66,7 +65,7 @@ export const postPaymentDetail = async (query: any) => {
   try {
     const response = await axios({
       method: 'POST',
-      url: 'http://172.16.30.26:8283/v1/api/payments/detail',
+      url: process.env.PROD_API_URL,
       headers: {
         'vendor-id': 'PAYRIFF',
         'Content-Type': 'application/json',
