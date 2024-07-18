@@ -24,7 +24,7 @@ const PaymentPageContainer = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('step', step.toString());
+      //localStorage.setItem('step', step.toString());
     }
   }, [step]);
 
