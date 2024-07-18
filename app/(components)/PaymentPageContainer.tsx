@@ -28,12 +28,12 @@ const PaymentPageContainer = () => {
   }, [step]);
 
   const nextStep = () => {
-    setStep((prevStep) => prevStep + 1);
+    //setStep((prevStep) => prevStep + 1);
   };
 
   // Decrement the step
   const prevStep = () => {
-    setStep((prevStep) => prevStep - 1);
+    //setStep((prevStep) => prevStep - 1);
   };
 
   useEffect(() => {

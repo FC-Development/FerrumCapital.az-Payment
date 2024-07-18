@@ -117,12 +117,12 @@ const PaymentProcess = ({ prev }: Props) => {
   useEffect(() => {
     if (status === 'canceled') {
       setLoading(true);
-      setAmount(paymentAmount);
-      const query = {
-        pinCode: pinCode,
-        dateOfBirth: birthdate,
-      };
-      getDetails(JSON.stringify(query));
+      // setAmount(paymentAmount);
+      // const query = {
+      //   pinCode: pinCode,
+      //   dateOfBirth: birthdate,
+      // };
+      //getDetails(JSON.stringify(query));
     }
   }, []);
   return loading ? (
