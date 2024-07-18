@@ -17,9 +17,10 @@ const PaymentPageContainer = () => {
   const paymentAmount: any = searchParams?.get('amount');
   const stepIndex =
     typeof window !== 'undefined' ? window.localStorage.getItem('step') : null;
-  const [step, setStep] = useState<number>(
-    status === 'canceled' ? 3 : stepIndex ? Number(stepIndex) : 1
-  );
+  // const [step, setStep] = useState<number>(
+  //   status === 'canceled' ? 3 : stepIndex ? Number(stepIndex) : 1
+  // );
+  const [step, setStep] = useState<number>(1);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -28,12 +29,12 @@ const PaymentPageContainer = () => {
   }, [step]);
 
   const nextStep = () => {
-    //setStep((prevStep) => prevStep + 1);
+    setStep((prevStep) => prevStep + 1);
   };
 
   // Decrement the step
   const prevStep = () => {
-    //setStep((prevStep) => prevStep - 1);
+    setStep((prevStep) => prevStep - 1);
   };
 
   useEffect(() => {
