@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 
 export async function POST(req: any, res: any) {
-  const url = process.env.TEST_API_URL || '';
+  const url = process.env.PROD_API_URL || '';
   try {
     const medata = await req.json(); // Access request body correctly
     console.log(medata);

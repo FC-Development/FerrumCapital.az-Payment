@@ -17,13 +17,14 @@ const PaymentPageContainer = () => {
   const paymentAmount: any = searchParams?.get('amount');
   const stepIndex =
     typeof window !== 'undefined' ? window.localStorage.getItem('step') : null;
-  const [step, setStep] = useState<number>(
-    status === 'canceled' ? 3 : stepIndex ? Number(stepIndex) : 1
-  );
+  // const [step, setStep] = useState<number>(
+  //   status === 'canceled' ? 3 : stepIndex ? Number(stepIndex) : 1
+  // );
+  const [step, setStep] = useState<number>(1);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('step', step.toString());
+      //localStorage.setItem('step', step.toString());
     }
   }, [step]);
 

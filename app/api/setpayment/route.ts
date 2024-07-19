@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 axiosCurlirize(axios);
 
 export async function POST(req: any, res: any) {
-  const url = process.env.TEST_SET_PAYMENT_API_URL || '';
+  const url = process.env.PROD_SET_PAYMENT_API_URL || '';
 
   const metadata = await req.json();
   const { searchParams } = new URL(req.url);
@@ -14,8 +14,10 @@ export async function POST(req: any, res: any) {
   const docNum = searchParams.get('docnum');
 
   const payload = {
-    docItemNumber: docNum,
-    pinCode: pincode,
+    // docItemNumber: docNum, //istifade olunmayacaq artiq
+    // pinCode: pincode, //istifade olunmayacaq artiq
+    docItemNumber: metadata.payload.description, 
+    pinCode: metadata.payload.customMessage,
     transactId: metadata.payload.orderId,
     paymentDate: dayjs(metadata.payload.createdDate).format(
       'YYYY-MM-DD HH:mm:ss'
