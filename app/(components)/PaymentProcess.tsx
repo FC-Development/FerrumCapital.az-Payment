@@ -71,8 +71,7 @@ const PaymentProcess = ({ prev }: Props) => {
   };
 
   const handleSubmit = async () => {
-    alert("Texniki işlərdən dolayı xidmət müvəqqəti olaraq dayandırlmışdır");
-    /*
+    // alert("Texniki işlərdən dolayı xidmət müvəqqəti olaraq dayandırlmışdır");
     setLoading(true);
     try {
       setLoading(true);
@@ -92,7 +91,6 @@ const PaymentProcess = ({ prev }: Props) => {
       console.log(error);
       setLoading(false);
     }
-    */
   };
   const getDetails = async (query: any) => {
     setLoading(true);
