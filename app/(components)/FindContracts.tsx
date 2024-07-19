@@ -126,7 +126,7 @@ const FindContracts = ({ next }: Props) => {
         </div>
         <Input
           defaultValue={finCodeValue ?? ''}
-          value={fields?.finCod}
+          value={fields?.finCode}
           placeholder="Finkod daxil edin"
           width={456}
           maxLength={7}
