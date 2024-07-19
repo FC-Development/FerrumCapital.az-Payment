@@ -5,6 +5,12 @@ import dayjs from 'dayjs';
 
 axiosCurlirize(axios);
 
+export async function GET(req: any, res: any) {
+    return NextResponse.redirect(
+      `https://payment.ferrumcapital.az/payment?res_rtm=approve`
+    );
+}
+
 export async function POST(req: any, res: any) {
   const url = process.env.PROD_SET_PAYMENT_API_URL || '';
 
