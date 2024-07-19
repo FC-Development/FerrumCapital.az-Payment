@@ -33,7 +33,7 @@ export const postAmount = async (query: any) => {
       data: {
         body: {
           amount: query.amount,
-          approveURL: `https://payment.ferrumcapital.az/payment?res_rtm=approve`,
+          approveURL: `https://payment.ferrumcapital.az/api/setpayment`,
           cancelURL: `https://payment.ferrumcapital.az/payment?res_rtm=canceled`,
           currencyType: 'AZN',
           customMessage: query.pinCode, //musteri finkodu gonderilecek ve cekilecek
