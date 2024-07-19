@@ -35,7 +35,7 @@ export async function POST(req: any, res: any) {
 
     // return NextResponse.json(response.data);
     return NextResponse.redirect(
-      `http://localhost:8884/payment?res_rtm=approve&amount=${payload.amount}&docnum=${payload.docItemNumber}&pincode=${payload.pinCode}`
+      `https://payment.ferrumcapital.az/payment?res_rtm=approve`
     );
   } catch (error) {
     return NextResponse.json(
