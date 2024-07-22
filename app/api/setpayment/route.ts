@@ -41,7 +41,7 @@ export async function POST(req: any, res: any) {
     console.log('\nOur data:\n' + JSON.stringify(payload));
     console.log("\n ↑↑↑↑↑↑ Ferrum servis (set payment) sorğusu uğurlu ↑↑↑↑↑↑ \n");
     //@ts-ignore
-    return NextResponse.json(response.data);
+    return NextResponse.json(response?.data);
   } catch (error) {
     console.log("\n ↓↓↓↓↓↓ Ferrum servis (set payment) sorğusu xətalı ↓↓↓↓↓↓ \n");
     console.log('Payriff post data:\n' + JSON.stringify(metadata.payload));
@@ -52,7 +52,7 @@ export async function POST(req: any, res: any) {
     //@ts-ignore
     console.log(JSON.stringify(response?.data));
     console.log("\n ↑↑↑↑↑↑ API level xəta ↑↑↑↑↑↑ \n");
-    
+
     return NextResponse.json(
       //@ts-ignore
       error.response?.data,
