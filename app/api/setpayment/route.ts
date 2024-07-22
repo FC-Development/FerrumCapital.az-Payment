@@ -41,9 +41,10 @@ export async function POST(req: any, res: any) {
         'Content-Type': 'application/json',
       },
     });
-    const logEntry_3 = `${new Date().toISOString()} - NR res payload: - ${JSON.stringify(service_response.data)}\n`;
+    const logEntry_3 = `${new Date().toISOString()} - NR res payload: - ${JSON.stringify(service_response.data)}\n\n`;
     fs.appendFile(logFilePath, logEntry_3, err => err ? console.error('NR res log xəta:', err) : console.log('NR res log yazıldı'));
-
+    console.log(service_response);
+    
     return NextResponse.json(
       //@ts-ignore
       { 
@@ -54,6 +55,9 @@ export async function POST(req: any, res: any) {
       { status: 200 }
     );
   } catch (error) {
+    //@ts-ignore
+    const logEntry_3 = `${new Date().toISOString()} - NR res error: - ${JSON.stringify(error.data)}\n\n`;
+    fs.appendFile(logFilePath, logEntry_3, err => err ? console.error('NR res error log xəta:', err) : console.log('NR error log yazıldı'));
     return NextResponse.json(
       //@ts-ignore
       error.response?.data,
