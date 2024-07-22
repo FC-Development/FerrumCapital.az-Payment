@@ -8,13 +8,22 @@ import path from 'path';
 axiosCurlirize(axios);
 
 export async function GET(req: any, res: any) {
-    return NextResponse.redirect(`https://payment.ferrumcapital.az/payment?res_rtm=approve`);
+    return NextResponse.redirect(
+      `https://payment.ferrumcapital.az/payment?res_rtm=approve`
+    );
 }
 
 export async function POST(req: any, res: any) {
   const url = process.env.PROD_SET_PAYMENT_API_URL || '';
 
   const metadata = await req.json();
+  if(metadata.payload) {
+    console.log("EXIST")
+    //burdan loglama getmelidi breakpoint esasinda
+  }
+  else {
+    console.log("NOT EXIST!!!")
+  }
   const logEntry = `${new Date().toISOString()} - ${JSON.stringify(metadata)}\n`;
   console.log(process.cwd());
   
@@ -34,7 +43,9 @@ export async function POST(req: any, res: any) {
     docItemNumber: metadata.payload.description,
     pinCode: "0",
     transactId: metadata.payload.orderId,
-    paymentDate: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+    paymentDate: dayjs(Date.now()).format(
+      'YYYY-MM-DD HH:mm:ss'
+    ),
     amount: metadata.payload.amount,
   };
 
@@ -45,9 +56,26 @@ export async function POST(req: any, res: any) {
         'Content-Type': 'application/json',
       },
     });
+    console.log("\n ↓↓↓↓↓↓ Ferrum servis (set payment) sorğusu uğurlu ↓↓↓↓↓↓ \n");
+    console.log('Payriff post data:\n' + JSON.stringify(metadata.payload));
+    console.log('\nOur data:\n' + JSON.stringify(payload));
+    console.log("\n ↑↑↑↑↑↑ Ferrum servis (set payment) sorğusu uğurlu ↑↑↑↑↑↑ \n");
     //@ts-ignore
     return NextResponse.json(response?.data);
   } catch (error) {
+
+    //rs append
+
+    console.log("\n ↓↓↓↓↓↓ Ferrum servis (set payment) sorğusu xətalı ↓↓↓↓↓↓ \n");
+    console.log('Payriff post data:\n' + JSON.stringify(metadata.payload));
+    console.log('\nOur data:\n' + JSON.stringify(payload));
+    console.log("\n ↑↑↑↑↑↑ Ferrum servis (set payment) sorğusu xətalı ↑↑↑↑↑↑ \n");
+
+    console.log("\n ↓↓↓↓↓↓ API level xəta ↓↓↓↓↓↓ \n");
+    //@ts-ignore
+    console.log(JSON.stringify(error.response));
+    console.log("\n ↑↑↑↑↑↑ API level xəta ↑↑↑↑↑↑ \n");
+
     return NextResponse.json(
       //@ts-ignore
       error.response?.data,
