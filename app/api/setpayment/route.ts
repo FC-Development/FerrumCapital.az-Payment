@@ -43,7 +43,7 @@ export async function POST(req: any, res: any) {
         'Content-Type': 'application/json',
       },
     });
-
+    console.log("\nFerrum servis (set payment) sorğusu uğurlu\n");
     // return NextResponse.json(response.data);
     return NextResponse.json(payload);
     // return NextResponse.redirect(
