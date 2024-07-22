@@ -15,39 +15,42 @@ export async function POST(req: any, res: any) {
   const url = process.env.PROD_SET_PAYMENT_API_URL || '';
 
   const metadata = await req.json();
-  const logEntry = `${new Date().toISOString()} - ${JSON.stringify(metadata)}\n`;
-  
+
   const logFilePath = path.join(process.cwd(), 'logs', 'server.log');
   if (!fs.existsSync(path.dirname(logFilePath))) {
     fs.mkdirSync(path.dirname(logFilePath), { recursive: true });
   }
-  fs.appendFile(logFilePath, logEntry, (err) => {
-    if (err) {
-      console.error('Failed to write to log file:', err);
-    }
-    else {
-      console.log('yazildi')
-    }
-  });
-  const payload = {
-    docItemNumber: metadata.payload.description,
-    pinCode: "0",
-    transactId: metadata.payload.orderId,
-    paymentDate: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-    amount: metadata.payload.amount,
-  };
+
+  const logEntry_1 = `${new Date().toISOString()} - Payriff payload: - ${JSON.stringify(metadata)}\n`;
+  fs.appendFile(logFilePath, logEntry_1, err => err ? console.error('Payriff log xəta:', err) : console.log('Payriff log yazıldı'));
 
   try {
-    await axios.post(url, payload, {
+    const payload = {
+      docItemNumber: metadata.payload.description,
+      pinCode: "0",
+      transactId: metadata.payload.orderId,
+      paymentDate: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+      amount: metadata.payload.amount,
+    };
+    const logEntry_2 = `${new Date().toISOString()} - Our payload: - ${JSON.stringify(payload)}\n`;
+    fs.appendFile(logFilePath, logEntry_2, err => err ? console.error('Our log xəta:', err) : console.log('Our log yazıldı'));
+
+    const service_response = await axios.post(url, payload, {
       headers: {
         'vendor-id': 'PAYRIFF',
         'Content-Type': 'application/json',
       },
     });
-    //@ts-ignore
+    const logEntry_3 = `${new Date().toISOString()} - NR res payload: - ${JSON.stringify(service_response.data)}\n`;
+    fs.appendFile(logFilePath, logEntry_3, err => err ? console.error('NR res log xəta:', err) : console.log('NR res log yazıldı'));
+
     return NextResponse.json(
       //@ts-ignore
-      { fc_service_nr: "ok" },
+      { 
+        fc_service_nr: "ok", 
+        //@ts-ignore
+        fc_service_response: service_response.data
+      },
       { status: 200 }
     );
   } catch (error) {
