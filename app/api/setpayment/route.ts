@@ -45,6 +45,7 @@ export async function POST(req: any, res: any) {
       `https://payment.ferrumcapital.az/payment?res_rtm=approve`
     );
   } catch (error) {
+    console.log(Date.now());
     return NextResponse.json(
       //@ts-ignore
       error.response?.data,
