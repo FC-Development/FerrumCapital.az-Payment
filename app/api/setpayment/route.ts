@@ -15,6 +15,7 @@ export async function POST(req: any, res: any) {
   const url = process.env.PROD_SET_PAYMENT_API_URL || '';
 
   const metadata = await req.json();
+  console.log(JSON.stringify(metadata));
   const { searchParams } = new URL(req.url);
   const pincode = searchParams.get('pincode');
   const docNum = searchParams.get('docnum');
