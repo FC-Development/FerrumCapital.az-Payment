@@ -16,7 +16,6 @@ export async function POST(req: any, res: any) {
 
   const metadata = await req.json();
   const logEntry = `${new Date().toISOString()} - ${JSON.stringify(metadata)}\n`;
-  console.log(process.cwd());
   
   const logFilePath = path.join(process.cwd(), 'logs', 'server.log');
   if (!fs.existsSync(path.dirname(logFilePath))) {
@@ -46,7 +45,11 @@ export async function POST(req: any, res: any) {
       },
     });
     //@ts-ignore
-    return NextResponse.json(response?.data);
+    return NextResponse.json(
+      //@ts-ignore
+      { fc_service_nr: "ok" },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
       //@ts-ignore
