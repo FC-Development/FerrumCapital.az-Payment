@@ -50,7 +50,7 @@ export async function POST(req: any, res: any) {
 
     console.log("\n ↓↓↓↓↓↓ API level xəta ↓↓↓↓↓↓ \n");
     //@ts-ignore
-    console.log(JSON.stringify(response?.data));
+    console.log(JSON.stringify(error.response?.data));
     console.log("\n ↑↑↑↑↑↑ API level xəta ↑↑↑↑↑↑ \n");
 
     return NextResponse.json(
