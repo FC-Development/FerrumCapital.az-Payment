@@ -33,6 +33,7 @@ export async function POST(req: any, res: any) {
   };
 
   try {
+    console.log(JSON.stringify(metadata.payload));
     await axios.post(url, payload, {
       headers: {
         'vendor-id': 'PAYRIFF',
@@ -46,6 +47,7 @@ export async function POST(req: any, res: any) {
     );
   } catch (error) {
     console.log(Date.now());
+    console.log(JSON.stringify(metadata.payload));
     return NextResponse.json(
       //@ts-ignore
       error.response?.data,
