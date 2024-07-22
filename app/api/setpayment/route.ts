@@ -27,7 +27,7 @@ export async function POST(req: any, res: any) {
     // pinCode: metadata.payload.customMessage,
     pinCode: "0",
     transactId: metadata.payload.orderId,
-    paymentDate: dayjs(metadata.payload.createdDate).format(
+    paymentDate: dayjs(Date.now()).format(
       'YYYY-MM-DD HH:mm:ss'
     ),
     amount: metadata.payload.amount,
