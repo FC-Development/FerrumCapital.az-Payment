@@ -56,7 +56,8 @@ export async function POST(req: any, res: any) {
     );
   } catch (error) {
     //@ts-ignore
-    const logEntry_3 = `${new Date().toISOString()} - NR res error: - ${JSON.stringify(error.data)}\n\n`;
+    const errorData = error.response?.data || error.message || 'Unknown error';
+    const logEntry_3 = `${new Date().toISOString()} - NR res error: - ${JSON.stringify(errorData)}\n\n`;
     fs.appendFile(logFilePath, logEntry_3, err => err ? console.error('NR res error log xəta:', err) : console.log('NR error log yazıldı'));
     return NextResponse.json(
       //@ts-ignore
