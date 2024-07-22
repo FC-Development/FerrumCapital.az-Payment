@@ -23,7 +23,8 @@ export async function POST(req: any, res: any) {
     // docItemNumber: docNum, //istifade olunmayacaq artiq
     // pinCode: pincode, //istifade olunmayacaq artiq
     docItemNumber: metadata.payload.description, 
-    pinCode: metadata.payload.customMessage,
+    // pinCode: metadata.payload.customMessage,
+    pinCode: "0",
     transactId: metadata.payload.orderId,
     paymentDate: dayjs(metadata.payload.createdDate).format(
       'YYYY-MM-DD HH:mm:ss'
