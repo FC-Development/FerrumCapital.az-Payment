@@ -17,6 +17,7 @@ export async function POST(req: any, res: any) {
   const metadata = await req.json();
   console.log('indi' + Date.now());
   console.log(JSON.stringify(metadata));
+  console.log('Muqavile nomresi: ' + metadata.payload.description);
   const { searchParams } = new URL(req.url);
   const pincode = searchParams.get('pincode');
   const docNum = searchParams.get('docnum');
