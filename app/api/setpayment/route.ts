@@ -43,9 +43,10 @@ export async function POST(req: any, res: any) {
     });
 
     // return NextResponse.json(response.data);
-    return NextResponse.redirect(
-      `https://payment.ferrumcapital.az/payment?res_rtm=approve`
-    );
+    return NextResponse.json(payload);
+    // return NextResponse.redirect(
+    //   `https://payment.ferrumcapital.az/payment?res_rtm=approve`
+    // );
   } catch (error) {
     console.log(Date.now());
     console.log(JSON.stringify(metadata.payload));
