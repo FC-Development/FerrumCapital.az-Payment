@@ -15,9 +15,6 @@ export async function POST(req: any, res: any) {
   const url = process.env.PROD_SET_PAYMENT_API_URL || '';
 
   const metadata = await req.json();
-  console.log('indi' + Date.now());
-  console.log(JSON.stringify(metadata));
-  console.log('Muqavile nomresi: ' + metadata.payload.description);
   const { searchParams } = new URL(req.url);
   const pincode = searchParams.get('pincode');
   const docNum = searchParams.get('docnum');
@@ -36,23 +33,26 @@ export async function POST(req: any, res: any) {
   };
 
   try {
-    console.log(JSON.stringify(metadata.payload));
     await axios.post(url, payload, {
       headers: {
         'vendor-id': 'PAYRIFF',
         'Content-Type': 'application/json',
       },
     });
-    console.log("\nFerrum servis (set payment) sorğusu uğurlu\n");
+    console.log("\n ↓↓↓↓↓↓ Ferrum servis (set payment) sorğusu uğurlu ↓↓↓↓↓↓ \n");
+    console.log('Payriff post data:\n' + JSON.stringify(metadata.payload));
+    console.log('\nOur data:\n' + JSON.stringify(payload));
+    console.log("\n ↑↑↑↑↑↑ Ferrum servis (set payment) sorğusu uğurlu ↑↑↑↑↑↑ \n");
     // return NextResponse.json(response.data);
     return NextResponse.json(payload);
     // return NextResponse.redirect(
     //   `https://payment.ferrumcapital.az/payment?res_rtm=approve`
     // );
   } catch (error) {
-    console.log(Date.now());
-    console.log(JSON.stringify(metadata.payload));
-    console.log("\nFerrum servis (set payment) sorğusu xətalı\n");
+    console.log("\n ↓↓↓↓↓↓ Ferrum servis (set payment) sorğusu xətalı ↓↓↓↓↓↓ \n");
+    console.log('Payriff post data:\n' + JSON.stringify(metadata.payload));
+    console.log('\nOur data:\n' + JSON.stringify(payload));
+    console.log("\n ↑↑↑↑↑↑ Ferrum servis (set payment) sorğusu xətalı ↑↑↑↑↑↑ \n");
     return NextResponse.json(
       //@ts-ignore
       error.response?.data,
