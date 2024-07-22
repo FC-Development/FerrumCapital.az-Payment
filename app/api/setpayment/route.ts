@@ -52,6 +52,7 @@ export async function POST(req: any, res: any) {
   } catch (error) {
     console.log(Date.now());
     console.log(JSON.stringify(metadata.payload));
+    console.log("\nFerrum servis (set payment) sorğusu xətalı\n");
     return NextResponse.json(
       //@ts-ignore
       error.response?.data,
