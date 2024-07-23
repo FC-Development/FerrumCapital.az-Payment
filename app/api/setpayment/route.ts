@@ -13,7 +13,6 @@ export async function GET(req: any, res: any) {
 
 export async function POST(req: any, res: any) {
   const url = process.env.PROD_SET_PAYMENT_API_URL || '';
-
   const metadata = await req.json();
 
   const logFilePath = path.join(process.cwd(), 'logs', 'server.log');
