@@ -21,8 +21,8 @@ export async function POST(req: any, res: any) {
     fs.mkdirSync(path.dirname(logFilePath), { recursive: true });
   }
 
-  const logEntry_1 = `${new Date().toISOString()} - Payriff payload: - ${JSON.stringify(metadata)}\n`;
-  fs.appendFile(logFilePath, logEntry_1, err => err ? console.error('Payriff log xəta:', err) : console.log('Payriff log yazıldı'));
+  const logEntry_1 = `${new Date().toISOString()} - Payriff post payload: - ${JSON.stringify(metadata)}\n`;
+  fs.appendFile(logFilePath, logEntry_1, err => err ? console.error('Payriff post payload log xəta:', err) : console.log('Payriff post payload log yazıldı'));
 
   try {
     const payload = {
@@ -33,7 +33,7 @@ export async function POST(req: any, res: any) {
       amount: metadata.amount,
     };
     const logEntry_2 = `${new Date().toISOString()} - Our payload: - ${JSON.stringify(payload)}\n`;
-    fs.appendFile(logFilePath, logEntry_2, err => err ? console.error('Our log xəta:', err) : console.log('Our log yazıldı'));
+    fs.appendFile(logFilePath, logEntry_2, err => err ? console.error('Our payload log xəta:', err) : console.log('Our payload log yazıldı'));
 
     const service_response = await axios.post(url, payload, {
       headers: {
@@ -41,7 +41,7 @@ export async function POST(req: any, res: any) {
         'Content-Type': 'application/json',
       },
     });
-    const logEntry_3 = `${new Date().toISOString()} - NR res payload: - ${JSON.stringify(service_response.data)}\n\n`;
+    const logEntry_3 = `${new Date().toISOString()} - NR res success: - ${JSON.stringify(service_response.data)}\n\n`;
     fs.appendFile(logFilePath, logEntry_3, err => err ? console.error('NR res log xəta:', err) : console.log('NR res log yazıldı'));
     console.log(service_response);
     
@@ -59,7 +59,7 @@ export async function POST(req: any, res: any) {
     //@ts-ignore
     const errorData = error.response?.data || error.message || 'Unknown error';
     const logEntry_3 = `${new Date().toISOString()} - NR res error: - ${JSON.stringify(errorData)}\n\n`;
-    fs.appendFile(logFilePath, logEntry_3, err => err ? console.error('NR res error log xəta:', err) : console.log('NR error log yazıldı'));
+    fs.appendFile(logFilePath, logEntry_3, err => err ? console.error('NR res error log xəta:', err) : console.log('NR res error log yazıldı'));
     return NextResponse.json(
       //@ts-ignore
       error.response?.data,
