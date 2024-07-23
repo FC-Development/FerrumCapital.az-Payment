@@ -26,11 +26,11 @@ export async function POST(req: any, res: any) {
 
   try {
     const payload = {
-      docItemNumber: metadata.payload.description,
+      docItemNumber: metadata.description,
       pinCode: "0",
-      transactId: metadata.payload.orderId,
+      transactId: metadata.orderId,
       paymentDate: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-      amount: metadata.payload.amount,
+      amount: metadata.amount,
     };
     const logEntry_2 = `${new Date().toISOString()} - Our payload: - ${JSON.stringify(payload)}\n`;
     fs.appendFile(logFilePath, logEntry_2, err => err ? console.error('Our log xəta:', err) : console.log('Our log yazıldı'));
@@ -54,6 +54,7 @@ export async function POST(req: any, res: any) {
       },
       { status: 200 }
     );
+    
   } catch (error) {
     //@ts-ignore
     const errorData = error.response?.data || error.message || 'Unknown error';
