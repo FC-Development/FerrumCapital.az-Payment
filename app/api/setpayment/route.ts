@@ -26,11 +26,11 @@ export async function POST(req: any, res: any) {
 
   try {
     const payload = {
-      docItemNumber: metadata.description,
+      docItemNumber: metadata.description || metadata.payload.description,
       pinCode: "0",
-      transactId: metadata.orderId,
+      transactId: metadata.orderId || metadata.payload.orderId,
       paymentDate: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-      amount: metadata.amount,
+      amount: metadata.amount || metadata.payload.amount,
     };
     const logEntry_2 = `${new Date().toISOString()} - Our payload: - ${JSON.stringify(payload)}\n`;
     fs.appendFile(logFilePath, logEntry_2, err => err ? console.error('Our payload log xəta:', err) : console.log('Our payload log yazıldı'));
