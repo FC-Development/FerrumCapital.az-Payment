@@ -38,6 +38,7 @@ interface Metadata {
     description?: string;
     orderId?: string;
     amount?: number;
+    paymentStatus?: string;
   };
 }
 
@@ -50,39 +51,50 @@ export async function POST(req: Request): Promise<NextResponse> {
   const logEntry_1 = `${new Date().toISOString()} - Payriff post payload: - ${JSON.stringify(metadata)}\n`;
   await appendLog(logEntry_1);
 
-  try {
-    const payload = {
-      docItemNumber: metadata.description || metadata.payload?.description,
-      pinCode: "0",
-      transactId: metadata.orderId || metadata.payload?.orderId,
-      paymentDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-      amount: metadata.amount || metadata.payload?.amount,
-    };
-    const logEntry_2 = `${new Date().toISOString()} - Our payload: - ${JSON.stringify(payload)}\n`;
-    await appendLog(logEntry_2);
+  // Check if paymentStatus is not DECLINED
+  if (metadata.payload?.paymentStatus !== "DECLINED") {
+    try {
+      const payload = {
+        docItemNumber: metadata.description || metadata.payload?.description,
+        pinCode: "0",
+        transactId: metadata.orderId || metadata.payload?.orderId,
+        paymentDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        amount: metadata.amount || metadata.payload?.amount,
+      };
+      const logEntry_2 = `${new Date().toISOString()} - Our payload: - ${JSON.stringify(payload)}\n`;
+      await appendLog(logEntry_2);
 
-    const serviceResponse = await axios.post(url, payload, {
-      headers: {
-        'vendor-id': 'PAYRIFF',
-        'Content-Type': 'application/json',
-      },
-    });
-    const logEntry_3 = `${new Date().toISOString()} - NR res success: - ${JSON.stringify(serviceResponse.data)}\n\n`;
-    await appendLog(logEntry_3);
+      const serviceResponse = await axios.post(url, payload, {
+        headers: {
+          'vendor-id': 'PAYRIFF',
+          'Content-Type': 'application/json',
+        },
+      });
+      const logEntry_3 = `${new Date().toISOString()} - NR res success: - ${JSON.stringify(serviceResponse.data)}\n\n`;
+      await appendLog(logEntry_3);
 
+      return NextResponse.json(
+        { 
+          fc_service_nr: "ok", 
+          fc_service_response: serviceResponse.data
+        },
+        { status: 200 }
+      );
+      
+    } catch (error: any) {
+      const errorData = error.response?.data || error.message || 'Unknown error';
+      const logEntry_3 = `${new Date().toISOString()} - NR res error: - ${JSON.stringify(errorData)}\n\n`;
+      await appendLog(logEntry_3);
+
+      return NextResponse.json(errorData, { status: 500 });
+    }
+  } else {
+    // Log and return a response if the payment status is DECLINED
+    const logEntry_4 = `${new Date().toISOString()} - Payment status is DECLINED, not proceeding with the request.\n\n`;
+    await appendLog(logEntry_4);
     return NextResponse.json(
-      { 
-        fc_service_nr: "ok", 
-        fc_service_response: serviceResponse.data
-      },
-      { status: 200 }
+      { error: "Payment status is DECLINED, request not processed." },
+      { status: 400 }
     );
-    
-  } catch (error: any) {
-    const errorData = error.response?.data || error.message || 'Unknown error';
-    const logEntry_3 = `${new Date().toISOString()} - NR res error: - ${JSON.stringify(errorData)}\n\n`;
-    await appendLog(logEntry_3);
-
-    return NextResponse.json(errorData, { status: 500 });
   }
 }
