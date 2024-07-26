@@ -51,8 +51,8 @@ export async function POST(req: Request): Promise<NextResponse> {
   const logEntry_1 = `${new Date().toISOString()} - Payriff post payload: - ${JSON.stringify(metadata)}\n`;
   await appendLog(logEntry_1);
 
-  // Check if paymentStatus is not DECLINED
-  if (metadata.payload?.paymentStatus !== "DECLINED") {
+  // Check if paymentStatus is APPROVED
+  if (metadata.payload?.paymentStatus === "APPROVED") {
     try {
       const payload = {
         docItemNumber: metadata.description || metadata.payload?.description,
@@ -89,11 +89,11 @@ export async function POST(req: Request): Promise<NextResponse> {
       return NextResponse.json(errorData, { status: 500 });
     }
   } else {
-    // Log and return a response if the payment status is DECLINED
-    const logEntry_4 = `${new Date().toISOString()} - Payment status is DECLINED, not proceeding with the request.\n\n`;
+    // Log and return a response if the payment status is not APPROVED
+    const logEntry_4 = `${new Date().toISOString()} - Payment status is not APPROVED, not proceeding with the request.\n\n`;
     await appendLog(logEntry_4);
     return NextResponse.json(
-      { error: "Payment status is DECLINED, request not processed." },
+      { error: "Payment status is not APPROVED, request not processed." },
       { status: 400 }
     );
   }
